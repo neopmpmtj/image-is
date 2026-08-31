@@ -1,0 +1,20 @@
+{% extends "image_is/base.html" %}
+
+{% block title %}API key invalid · Image Analysis{% endblock %}
+
+{% block content %}
+<div class="layout narrow">
+  <section class="panel">
+    <h2>{{ lab.lab_label }} API key problem</h2>
+    <p>{{ status.message }}</p>
+    {% if status.missing_models %}
+      <p class="muted">Missing models: {{ status.missing_models|join:", " }}</p>
+    {% endif %}
+    <p>
+      Update <code class="inline">.env</code> at the project root,
+      then restart the server.
+    </p>
+    <p><a href="?recheck=1">Re-check API key</a></p>
+  </section>
+</div>
+{% endblock %}

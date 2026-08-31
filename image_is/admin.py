@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from image_is.models import ImageAnalysis
+
+admin.site.register(ImageAnalysis)

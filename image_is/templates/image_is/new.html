@@ -1,0 +1,59 @@
+{% extends "image_is/base.html" %}
+
+{% block title %}New analysis · Image Analysis{% endblock %}
+
+{% block content %}
+<div class="layout narrow">
+  <section class="panel">
+    <h2>New analysis</h2>
+
+    {% if not key_ok %}
+    <div class="alert error" role="alert">
+      {{ key_status.message }}
+      {% if key_status.missing_models %}
+      <p class="help" style="margin:0.5rem 0 0;">Missing models: {{ key_status.missing_models|join:", " }}</p>
+      {% endif %}
+    </div>
+    {% else %}
+    <div class="alert ok" role="status">{{ key_status.message }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" data-wait="Analyzing image…"{% if not key_ok %} style="opacity:0.65"{% endif %}>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <ul class="errorlist">{% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+      {% endif %}
+
+      <label for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+      {{ form.image }}
+      {{ form.image.errors }}
+
+      <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+      {{ form.description }}
+      <p class="help">{{ form.description.help_text }}</p>
+      {{ form.description.errors }}
+
+      <label for="{{ form.omit_instructions.id_for_label }}">
+        {{ form.omit_instructions }} {{ form.omit_instructions.label }}
+      </label>
+      <p class="help">{{ form.omit_instructions.help_text }}</p>
+      {{ form.omit_instructions.errors }}
+
+      <label for="{{ form.prompt_preset.id_for_label }}">{{ form.prompt_preset.label }}</label>
+      {{ form.prompt_preset }}
+      <p class="help">{{ form.prompt_preset.help_text }}</p>
+      {{ form.prompt_preset.errors }}
+
+      <label for="{{ form.additional.id_for_label }}">{{ form.additional.label }}</label>
+      {{ form.additional }}
+      <p class="help">{{ form.additional.help_text }}</p>
+      {{ form.additional.errors }}
+
+      <div class="actions">
+        <button class="btn" type="submit"{% if not key_ok %} disabled{% endif %}>Analyze</button>
+        <a class="btn secondary" href="{% url 'image_is:history' %}">Cancel</a>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}
